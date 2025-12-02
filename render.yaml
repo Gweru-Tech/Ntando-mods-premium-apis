@@ -1,0 +1,45 @@
+services:
+  # Type of service
+  type: web
+  
+  # Name of your service
+  name: 150-working-apis
+  
+  # Environment variables
+  env: node
+  
+  # Build and start commands
+  buildCommand: "npm install"
+  startCommand: "npm start"
+  
+  # Health check path
+  healthCheckPath: /
+  
+  # Instance size
+  instanceType: free
+  
+  # Region
+  region: oregon
+  
+  # Auto-deploy configuration
+  autoDeploy: true
+  
+  # Branch configuration
+  branch: main
+  
+  # Add custom domains if needed
+  # customDomains:
+  #   - your-domain.com
+  
+  # Environment variables
+  envVars:
+    - key: NODE_ENV
+      value: production
+    - key: PORT
+      value: 10000
+
+databases:
+  # Add databases if needed
+  # - name: postgres
+  #   databaseName: myapp
+  #   user: myapp
