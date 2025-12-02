@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SuperNinja Warmup</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            min-height: 100vh;
+        }
+        .container {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 30px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+        }
+        h1 {
+            text-align: center;
+            font-size: 2.5em;
+            margin-bottom: 20px;
+        }
+        
+        /* Tab System */
+        .tabs {
+            display: flex;
+            margin-bottom: 20px;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+        }
+        .tab-button {
+            background: none;
+            border: none;
+            color: rgba(255, 255, 255, 0.7);
+            padding: 12px 24px;
+            cursor: pointer;
+            font-size: 16px;
+            border-bottom: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+        .tab-button:hover {
+            color: white;
+            background: rgba(255, 255, 255, 0.1);
+        }
+        .tab-button.active {
+            color: white;
+            border-bottom-color: #4CAF50;
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        
+        /* Status Section */
+        .status {
+            background: rgba(76, 175, 80, 0.3);
+            border: 2px solid #4CAF50;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        
+        /* Testing Interface Styles */
+        .test-section {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .test-section h3 {
+            margin-top: 0;
+            color: #4CAF50;
+            border-bottom: 2px solid rgba(76, 175, 80, 0.3);
+            padding-bottom: 10px;
+        }
+        .test-form {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .test-form input,
+        .test-form textarea,
+        .test-form select {
+            padding: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 5px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            font-size: 14px;
+        }
+        .test-form input::placeholder,
+        .test-form textarea::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+        .test-form input:focus,
+        .test-form textarea:focus,
+        .test-form select:focus {
+            outline: none;
+            border-color: #4CAF50;
+            background: rgba(255, 255, 255, 0.15);
+        }
+        .test-form textarea {
+            min-height: 80px;
+            resize: vertical;
+        }
+        .test-form button {
+            background: linear-gradient(45deg, #4CAF50, #45a049);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            margin: 5px 0;
+        }
+        .test-form button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(76, 175, 80, 0.4);
+        }
+        .test-output {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        .test-output h3 {
+            margin-top: 0;
+            color: #FFD700;
+        }
+        .output-entry {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+            padding: 15px;
+            margin: 10px 0;
+            border-left: 4px solid #4CAF50;
+        }
+        .output-entry.error {
+            border-left-color: #f44336;
+        }
+        .output-entry.warning {
+            border-left-color: #ff9800;
+        }
+        .output-entry.info {
+            border-left-color: #2196F3;
+        }
+        .output-entry.success {
+            border-left-color: #4CAF50;
+        }
+        .output-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+        .timestamp {
+            font-size: 12px;
+            opacity: 0.7;
+        }
+        .output-body {
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            line-height: 1.4;
+        }
+        .test-results {
+            margin-top: 10px;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 5px;
+            min-height: 50px;
+        }
+        
+        /* Capabilities List */
+        .tool-list {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+            padding: 15px;
+            margin: 10px 0;
+        }
+        .tool-list ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        .tool-list li {
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            display: flex;
+            align-items: center;
+        }
+        .tool-list li:last-child {
+            border-bottom: none;
+        }
+        
+        /* Scrollbar Styling */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.5);
+        }
+    </style>
+<script src="https://sites.super.myninja.ai/_assets/ninja-daytona-script.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>🥷 SuperNinja AI Agent</h1>
+        
+        <div class="tabs">
+            <button class="tab-button active" onclick="switchTab('status')">Status</button>
+            <button class="tab-button" onclick="switchTab('testing')">Testing Interface</button>
+            <button class="tab-button" onclick="switchTab('capabilities')">Capabilities</button>
+        </div>
+
+        <div id="status-tab" class="tab-content active">
+            <div class="status">
+                <h2>✅ Warmup Status: Complete</h2>
+                <p>All tools are operational and ready for complex tasks!</p>
+            </div>
+        </div>
+
+        <div id="testing-tab" class="tab-content">
+            <h2>🧪 SuperNinja Testing Interface</h2>
+            
+            <div class="test-section">
+                <h3>📁 File Operations Test</h3>
+                <div class="test-form">
+                    <input type="text" id="filename" placeholder="Enter filename (e.g., test.txt)" />
+                    <textarea id="filecontent" placeholder="Enter file content..."></textarea>
+                    <button onclick="testFileOperation()">Create Test File</button>
+                    <button onclick="testFileRead()">Read File</button>
+                    <button onclick="testFileDelete()">Delete File</button>
+                </div>
+            </div>
+
+            <div class="test-section">
+                <h3>🔍 Web Search Test</h3>
+                <div class="test-form">
+                    <input type="text" id="searchQuery" placeholder="Enter search query..." />
+                    <input type="number" id="searchResults" placeholder="Number of results" value="5" min="1" max="20" />
+                    <button onclick="testWebSearch()">Search Web</button>
+                </div>
+            </div>
+
+            <div class="test-section">
+                <h3>🌐 Web Scraping Test</h3>
+                <div class="test-form">
+                    <input type="url" id="scrapeUrl" placeholder="Enter URL to scrape..." />
+                    <button onclick="testWebScraping()">Scrape Webpage</button>
+                </div>
+            </div>
+
+            <div class="test-section">
+                <h3>💻 Terminal Command Test</h3>
+                <div class="test-form">
+                    <input type="text" id="terminalCommand" placeholder="Enter terminal command..." />
+                    <button onclick="testTerminalCommand()">Execute Command</button>
+                </div>
+            </div>
+
+            <div class="test-section">
+                <h3>📊 Data Provider Test</h3>
+                <div class="test-form">
+                    <select id="dataProvider">
+                        <option value="">Select Data Provider</option>
+                        <option value="linkedin">LinkedIn</option>
+                        <option value="twitter">Twitter</option>
+                        <option value="zillow">Zillow</option>
+                        <option value="amazon">Amazon</option>
+                        <option value="yahoo_finance">Yahoo Finance</option>
+                        <option value="active_jobs">Active Jobs</option>
+                    </select>
+                    <button onclick="testDataProvider()">Get Endpoints</button>
+                    <div id="dataProviderResults" class="test-results"></div>
+                </div>
+            </div>
+
+            <div class="test-section">
+                <h3>🔊 YouTube Transcript Test</h3>
+                <div class="test-form">
+                    <input type="url" id="youtubeUrl" placeholder="Enter YouTube URL..." />
+                    <button onclick="testYouTubeTranscript()">Get Transcript</button>
+                </div>
+            </div>
+
+            <div id="testOutput" class="test-output">
+                <h3>📋 Test Results:</h3>
+                <div id="outputContent">No tests run yet. Try a test above!</div>
+            </div>
+        </div>
+
+        <div id="capabilities-tab" class="tab-content">
+            <div class="tool-list">
+                <h3>Available Capabilities:</h3>
+                <ul>
+                    <li>📁 File Operations (Create, Read, Write, Delete)</li>
+                    <li>🌐 Web Browsing & Scraping</li>
+                    <li>🔍 Web Search & Research</li>
+                    <li>📊 Data Processing & Analysis</li>
+                    <li>💻 Terminal Commands & System Operations</li>
+                    <li>🎨 Content Creation (HTML, CSS, JavaScript)</li>
+                    <li>📈 Data Visualization</li>
+                    <li>🔊 Audio Transcription</li>
+                    <li>📺 YouTube Transcript Extraction</li>
+                    <li>🖼️ Image Analysis</li>
+                    <li>📋 Excel File Processing</li>
+                    <li>🌍 Port Exposure & Deployment</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Tab switching functionality
+        function switchTab(tabName) {
+            // Hide all tabs
+            const tabs = document.querySelectorAll('.tab-content');
+            tabs.forEach(tab => tab.classList.remove('active'));
+            
+            // Remove active class from all buttons
+            const buttons = document.querySelectorAll('.tab-button');
+            buttons.forEach(button => button.classList.remove('active'));
+            
+            // Show selected tab
+            document.getElementById(tabName + '-tab').classList.add('active');
+            
+            // Add active class to clicked button
+            event.target.classList.add('active');
+        }
+
+        // Output management
+        function addOutput(title, content, type = 'info') {
+            const outputContent = document.getElementById('outputContent');
+            const timestamp = new Date().toLocaleTimeString();
+            
+            const outputEntry = document.createElement('div');
+            outputEntry.className = `output-entry ${type}`;
+            outputEntry.innerHTML = `
+                <div class="output-header">
+                    <strong>${title}</strong>
+                    <span class="timestamp">${timestamp}</span>
+                </div>
+                <div class="output-body">${content}</div>
+            `;
+            
+            outputContent.insertBefore(outputEntry, outputContent.firstChild);
+        }
+
+        // Test functions (mock implementations for demonstration)
+        function testFileOperation() {
+            const filename = document.getElementById('filename').value || 'test.txt';
+            const content = document.getElementById('filecontent').value || 'This is a test file created by SuperNinja.';
+            
+            addOutput('File Creation', `
+                <strong>Command:</strong> create-file<br>
+                <strong>File:</strong> ${filename}<br>
+                <strong>Content:</strong> ${content}<br>
+                <strong>Status:</strong> ✅ File created successfully<br>
+                <strong>Note:</strong> This is a demo. Actual file operations require the SuperNinja backend.
+            `, 'success');
+        }
+
+        function testFileRead() {
+            const filename = document.getElementById('filename').value || 'test.txt';
+            
+            addOutput('File Reading', `
+                <strong>Command:</strong> read-file<br>
+                <strong>File:</strong> ${filename}<br>
+                <strong>Status:</strong> ✅ File read successfully<br>
+                <strong>Note:</strong> This is a demo. Actual file reading requires the SuperNinja backend.
+            `, 'success');
+        }
+
+        function testFileDelete() {
+            const filename = document.getElementById('filename').value || 'test.txt';
+            
+            addOutput('File Deletion', `
+                <strong>Command:</strong> delete-file<br>
+                <strong>File:</strong> ${filename}<br>
+                <strong>Status:</strong> ✅ File deleted successfully<br>
+                <strong>Note:</strong> This is a demo. Actual file deletion requires the SuperNinja backend.
+            `, 'success');
+        }
+
+        function testWebSearch() {
+            const query = document.getElementById('searchQuery').value || 'SuperNinja AI agent';
+            const numResults = document.getElementById('searchResults').value || 5;
+            
+            addOutput('Web Search', `
+                <strong>Command:</strong> web-search<br>
+                <strong>Query:</strong> ${query}<br>
+                <strong>Results:</strong> ${numResults}<br>
+                <strong>Status:</strong> ✅ Search completed successfully<br>
+                <strong>Note:</strong> This is a demo. Actual web search requires the SuperNinja backend.
+            `, 'info');
+        }
+
+        function testWebScraping() {
+            const url = document.getElementById('scrapeUrl').value || 'https://example.com';
+            
+            addOutput('Web Scraping', `
+                <strong>Command:</strong> scrape-webpage<br>
+                <strong>URL:</strong> ${url}<br>
+                <strong>Status:</strong> ✅ Page scraped successfully<br>
+                <strong>Note:</strong> This is a demo. Actual web scraping requires the SuperNinja backend.
+            `, 'info');
+        }
+
+        function testTerminalCommand() {
+            const command = document.getElementById('terminalCommand').value || 'ls -la';
+            
+            addOutput('Terminal Command', `
+                <strong>Command:</strong> ${command}<br>
+                <strong>Status:</strong> ✅ Command executed successfully<br>
+                <strong>Note:</strong> This is a demo. Actual terminal command execution requires the SuperNinja backend.
+            `, 'warning');
+        }
+
+        function testDataProvider() {
+            const provider = document.getElementById('dataProvider').value;
+            
+            if (!provider) {
+                addOutput('Data Provider Test', 'Please select a data provider first.', 'error');
+                return;
+            }
+            
+            addOutput('Data Provider', `
+                <strong>Provider:</strong> ${provider}<br>
+                <strong>Status:</strong> ✅ Endpoints retrieved successfully<br>
+                <strong>Note:</strong> This is a demo. Actual data provider access requires the SuperNinja backend.
+            `, 'info');
+        }
+
+        function testYouTubeTranscript() {
+            const url = document.getElementById('youtubeUrl').value;
+            
+            if (!url) {
+                addOutput('YouTube Transcript', 'Please enter a YouTube URL first.', 'error');
+                return;
+            }
+            
+            addOutput('YouTube Transcript', `
+                <strong>Command:</strong> transcribe-youtube<br>
+                <strong>URL:</strong> ${url}<br>
+                <strong>Status:</strong> ✅ Transcript retrieved successfully<br>
+                <strong>Note:</strong> This is a demo. Actual transcript extraction requires the SuperNinja backend.
+            `, 'success');
+        }
+
+        // Initialize with welcome message
+        window.addEventListener('load', () => {
+            addOutput('Testing Interface', 'Welcome to the SuperNinja Testing Interface! Select a test above to begin.', 'info');
+        });
+    </script>
+</body>
+</html>
